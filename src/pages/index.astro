@@ -1,0 +1,63 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import flows from "../components/flows/default.js";
+import Heading from "../components/heading.astro";
+import MermaidWrapper from "../components/MermaidWrapper.jsx";
+import Instructions from "../components/banner.astro";
+let markup = `graph TD
+	A[Christmas] -->|Get money| B(Go shopping)
+	B --> C{Let me think}
+	C -->|One| D[Laptop]
+	C -->|Two| E[iPhone]
+	C -->|Three| F[Car]
+`;
+---
+
+<Layout title="Default Workflows">
+	<main>
+		<Heading />
+		<Instructions />
+		<ul role="list" class="link-card-grid">
+			<Card
+				href="/ServiceNowFlows"
+				title="ServiceNow Flows"
+				body="Explore the ServiceNow Flows."
+			/>
+			<Card
+				href="/StandardFlows"
+				title="Standard Flows"
+				body="Explore the Standard Flows."
+			/>
+		</ul>
+		<MermaidWrapper client:load markup={markup} flows={flows} />
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 800px;
+		max-width: calc(100% - 2rem);
+		color: white;
+		font-size: 20px;
+		line-height: 1.6;
+	}
+	.astro-a {
+		position: absolute;
+		top: -32px;
+		left: 50%;
+		transform: translatex(-50%);
+		width: 220px;
+		height: auto;
+		z-index: -1;
+	}
+
+	.link-card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+		gap: 2rem;
+		padding: 0;
+	}
+</style>
