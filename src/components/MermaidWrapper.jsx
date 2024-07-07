@@ -7,31 +7,36 @@ function MermaidWrapper({ markup, flows }) {
     const mermaidHolderRef = useRef(null);
 
     useEffect(() => {
-        if (!window.mermaid) {
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.3.0/mermaid.min.js';
-            script.addEventListener('load', () => {
-                window.mermaid.mermaidAPI.initialize({
-                    securityLevel: 'loose',
+        // wait for page to load
+        if (document.readyState === 'complete') {
+            if (!window.mermaid) {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.3.0/mermaid.min.js';
+                script.addEventListener('load', () => {
+                    window.mermaid.mermaidAPI.initialize({
+                        securityLevel: 'loose',
+                    });
+                    window.mermaid.contentLoaded();
                 });
-                window.mermaid.contentLoaded();
-            });
-            script.addEventListener('error', (e) => {
-                console.error('Failed to load mermaid script:', e);
-            });
-            document.body.appendChild(script);
+                script.addEventListener('error', (e) => {
+                    console.error('Failed to load mermaid script:', e);
+                });
+                document.body.appendChild(script);
+            }
         }
     }, []);
 
     useEffect(() => {
-        if (window.mermaid) {
-            mermaidHolderRef.current.removeAttribute('data-processed');
-            mermaidHolderRef.current.innerHTML = graph;
-            window.mermaid.mermaidAPI.initialize({
-                securityLevel: 'loose',
-            });
+        if (document.readyState === 'complete') {
+            if (window.mermaid) {
+                mermaidHolderRef.current.removeAttribute('data-processed');
+                mermaidHolderRef.current.innerHTML = graph;
+                window.mermaid.mermaidAPI.initialize({
+                    securityLevel: 'loose',
+                });
+            }
+            drawDiagram();
         }
-        drawDiagram();
     }, [graph]);
 
     const drawDiagram = async () => {
