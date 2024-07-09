@@ -3,9 +3,10 @@ interface Props {
 	title: string;
 	body: string;
 	href: string;
+	backgroundColor?: string;
 }
 
-const { href, title, body } = Astro.props;
+const { href, title, body, backgroundColor } = Astro.props;
 ---
 
 <li class="link-card">
@@ -19,12 +20,12 @@ const { href, title, body } = Astro.props;
 		</p>
 	</a>
 </li>
-<style>
+<style define:vars={{ backgroundColor: backgroundColor ?? "#23262d" }}>
 	.link-card {
 		list-style: none;
 		display: flex;
 		padding: 1px;
-		background-color: #23262d;
+		background-color: var(--backgroundColor);
 		background-image: none;
 		background-size: 400%;
 		border-radius: 7px;
