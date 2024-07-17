@@ -11,7 +11,8 @@ function MermaidWrapper({ markup, flows }) {
         if (document.readyState === 'complete') {
             if (!window.mermaid) {
                 const script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.3.0/mermaid.min.js';
+                script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js';
+                //script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.3.0/mermaid.min.js';
                 script.addEventListener('load', () => {
                     window.mermaid.mermaidAPI.initialize({
                         securityLevel: 'loose',
