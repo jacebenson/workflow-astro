@@ -14,11 +14,22 @@ function MermaidWrapper({ markup, flows }) {
                 script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js';
                 //script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.3.0/mermaid.min.js';
                 script.addEventListener('load', () => {
-                    window.mermaid.mermaidAPI.initialize({
-                        securityLevel: 'loose',
+                    // wait for document to be ready
+                    document.addEventListener('DOMContentLoaded', () => {
+                        mermaidHolderRef.current.removeAttribute('data-processed');
+                        mermaidHolderRef.current.innerHTML = graph;
+                        window.mermaid.mermaidAPI.initialize({
+                            securityLevel: 'loose',
+                        });
+                        window.mermaid.contentLoaded();
                     });
-                    window.mermaid.contentLoaded();
-                });
+                }
+                );
+                //                    window.mermaid.mermaidAPI.initialize({
+                //                        securityLevel: 'loose',
+                //                    });
+                //                    window.mermaid.contentLoaded();
+                //                });
                 script.addEventListener('error', (e) => {
                     console.error('Failed to load mermaid script:', e);
                 });
