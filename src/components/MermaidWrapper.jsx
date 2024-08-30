@@ -1,8 +1,10 @@
 /**React component to render a textarea and div called "mermaid" */
 import { useEffect, useState, useRef } from "react";
 import mermaid from "mermaid"; // Import the mermaid library
+import { flow } from "./flows/default";
 function MermaidWrapper({ markup, flows }) {
-    const [graph, setGraph] = useState(markup);
+    const [graph, setGraph] = useState(markup || flows?.[0]?.flow);
+    const [title, setTitle] = useState(flows?.[0]?.label);
     const [buttons, setButtons] = useState(flows || []);
     const mermaidHolderRef = useRef(null);
 
@@ -12,9 +14,7 @@ function MermaidWrapper({ markup, flows }) {
             if (!window.mermaid) {
                 const script = document.createElement('script');
                 script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js';
-                //script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.3.0/mermaid.min.js';
                 script.addEventListener('load', () => {
-                    // wait for document to be ready
                     document.addEventListener('DOMContentLoaded', () => {
                         mermaidHolderRef.current.removeAttribute('data-processed');
                         mermaidHolderRef.current.innerHTML = graph;
@@ -25,11 +25,6 @@ function MermaidWrapper({ markup, flows }) {
                     });
                 }
                 );
-                //                    window.mermaid.mermaidAPI.initialize({
-                //                        securityLevel: 'loose',
-                //                    });
-                //                    window.mermaid.contentLoaded();
-                //                });
                 script.addEventListener('error', (e) => {
                     console.error('Failed to load mermaid script:', e);
                 });
@@ -80,12 +75,13 @@ function MermaidWrapper({ markup, flows }) {
                     style={buttonStyle}
                     onClick={() => {
                         setGraph(button.flow)
-
+                        setTitle(button.label)
                     }}
                 >
                     {button.label}
                 </button>
             ))}
+            <h2>{title}</h2>
             <details>
                 <summary>Mermaid Syntax</summary>
                 <textarea
